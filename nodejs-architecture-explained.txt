@@ -1,0 +1,39 @@
+Components:
+
+1. CallStack (LIFO)
+The JavaScript call stack is LIFO (Last In, First Out). This means that the last function added to the stack is the first one to be executed and removed.
+Any js code only runs in the call stack.
+Any js code that is synchronous will be executed in the call stack only.
+
+2. Event Loop (event loop is the architecture/mechanism how the nodejs runs asynchronous code)
+
+Phases (in order):
+	1.	TIMERS PHASE
+	    •	Executes callbacks scheduled by setTimeout() and setInterval().
+	2.	PENDING CALLBACKS PHASE
+	    •	Executes I/O callbacks that were deferred (e.g., some TCP errors).
+	3.	IDLE, PREPARE PHASE
+	    •	Used internally by Node.js - no user code runs here.
+	4.	POLL PHASE
+	    •	Retrieves new I/O events.
+	    •	Executes I/O-related callbacks (e.g., fs.read()).
+	    •	Will wait if there are no events to process.
+	5.	CHECK PHASE
+	    •	Executes callbacks scheduled by setImmediate().
+	6.	CLOSE CALLBACKS PHASE
+	    •	Executes close events like socket.on('close', ...).
+
+During each phase (1,2,3,4,5,6), it (phase) actively checks MICRO TASK QUEUE
+
+Micro task queue has 2 component:
+1. next tick queue (CBs queue) (higher precedence) (cb added by process.nextTick())
+2. promise queue (CBs queue) (precedence after next tick queue) (cb added by Promise.resolve().then())
+
+Note: 
+- if the current control is in Promise queue, it will not check next tick queue until all the promise cbs are finished.
+- The actual order of setTimeout and setImmediate may vary, but in most cases (when run from the main script), setTimeout fires before setImmediate.
+
+
+
+
+
